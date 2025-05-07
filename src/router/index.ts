@@ -7,8 +7,19 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: HomeView,
+    },
+    {
+      path: '/calendar',
+      name: 'Calendar',
+      component: () => import('@/views/CalendarView.vue'),
+    },
+    {
+      path: '/:stationId/booking/:bookingId?',
+      name: 'Booking',
+      component: () => import('@/views/BookingView.vue'),
+      props: true,
     },
   ],
 })
