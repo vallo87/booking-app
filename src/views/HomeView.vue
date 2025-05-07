@@ -1,5 +1,9 @@
 <script setup lang="ts"></script>
 
-<template>Home</template>
+<template>
+  <div class="w-full h-screen flex items-center justify-center bg-gray-100 p-0">
+    <h1 class="text-cyan-700">Ciao</h1>
+  </div>
+</template>
 
 <style scoped></style>
