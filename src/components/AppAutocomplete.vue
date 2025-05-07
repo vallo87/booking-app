@@ -7,6 +7,7 @@
         v-model="query"
         @input="onInput"
         @focus="open = true"
+        @keydown="onKeyDown"
         :disabled="!!selectedStation"
         placeholder="Search for a station..."
       />
@@ -24,9 +25,10 @@
       class="absolute mt-1 w-full bg-white border border-gray-200 rounded-md z-50 max-h-64 overflow-y-auto"
     >
       <li
-        v-for="station in filteredStations"
+        v-for="(station, index) in filteredStations"
         :key="station.id"
         class="px-4 py-2 hover:bg-cyan-50 cursor-pointer transition-colors"
+        :class="{ 'bg-cyan-100': index === highlightedIndex }"
         @click="select(station)"
       >
         {{ station.name }}
@@ -47,7 +49,7 @@ import { fetchStations } from '@/mockData/api'
 import { useStationStore } from '@/stores/station'
 import type { Station } from '@/types'
 import { useQuery } from '@tanstack/vue-query'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const stationStore = useStationStore()
 const query = ref('')
@@ -78,13 +80,45 @@ function select(station: Station) {
   // Note: instead of using an event emit i prefer to use a store to
   stationStore.setStation(station)
   open.value = false
+  highlightedIndex.value = -1
 }
 
 function clear() {
   stationStore.reset()
   query.value = ''
   open.value = false
+  highlightedIndex.value = -1
 }
+
+// Keyboard navigation
+
+const highlightedIndex = ref(-1)
+
+watch(query, () => {
+  highlightedIndex.value = -1
+})
+
+function onKeyDown(event: KeyboardEvent) {
+  if (!open.value || filteredStations.value.length === 0) return
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    if (highlightedIndex.value < filteredStations.value.length - 1) {
+      highlightedIndex.value++
+    }
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    if (highlightedIndex.value > 0) {
+      highlightedIndex.value--
+    }
+  } else if (event.key === 'Enter' && highlightedIndex.value >= 0) {
+    event.preventDefault()
+    const station = filteredStations.value[highlightedIndex.value]
+    select(station)
+  }
+}
+
+// Lifecycle hooks
 
 onMounted(() => {
   if (stationStore.stationValue) {
