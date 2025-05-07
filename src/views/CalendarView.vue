@@ -41,7 +41,7 @@
           <div
             v-for="b in bookingsForDay(day.date)"
             :key="b.id"
-            class="bg-cyan-700 text-white text-sm px-3 py-2 rounded-md mb-2 hover:bg-cyan-200 hover:text-black cursor-pointer transition"
+            class="link-to-booking bg-cyan-700 text-white text-sm px-3 py-2 rounded-md mb-2 hover:bg-cyan-200 hover:text-black cursor-pointer transition"
             @click="selectBooking(b)"
           >
             {{ b.customerName }}

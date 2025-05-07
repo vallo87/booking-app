@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
+import { mockStations } from '@/mockData/stations'
 import router from '@/router'
 import CalendarView from '@/views/CalendarView.vue'
 import { createTestingPinia } from '@pinia/testing'
@@ -9,7 +10,17 @@ import { format } from 'date-fns'
 
 describe('CalendarView.vue', () => {
   const renderComponent = () => {
-    const pinia = createTestingPinia({ createSpy: vi.fn })
+    const pinia = createTestingPinia({
+      createSpy: vi.fn,
+      stubActions: false,
+      initialState: {
+        station: {
+          // for simplicity i'm using the same mock data for the store
+          selectedStationId: mockStations[0].id,
+          stationValue: mockStations[0],
+        },
+      },
+    })
 
     const queryClient = new QueryClient()
     return mount(CalendarView, {
@@ -45,5 +56,20 @@ describe('CalendarView.vue', () => {
 
     await prevBtn?.trigger('click')
     expect(wrapper.text()).toContain('Week of 28 Sep 2020')
+  })
+
+  it('renders booking for the day', async () => {
+    const wrapper = renderComponent()
+
+    expect(wrapper.text()).toContain('Alden Carter')
+  })
+
+  it('calls selectBooking on booking click', async () => {
+    const wrapper = renderComponent()
+
+    const spy = vi.spyOn(wrapper.vm as any, 'selectBooking')
+    const bookingEl = wrapper.find('.link-to-booking')
+    await bookingEl.trigger('click')
+    expect(spy).toHaveBeenCalled()
   })
 })
