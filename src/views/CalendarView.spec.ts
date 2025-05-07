@@ -1,18 +1,20 @@
 import { describe, expect, it, vi } from 'vitest'
 
+import router from '@/router'
 import CalendarView from '@/views/CalendarView.vue'
 import { createTestingPinia } from '@pinia/testing'
-import { format } from 'date-fns'
+import { QueryClient, VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query'
 import { mount } from '@vue/test-utils'
-import router from '@/router'
+import { format } from 'date-fns'
 
 describe('CalendarView.vue', () => {
   const renderComponent = () => {
     const pinia = createTestingPinia({ createSpy: vi.fn })
 
+    const queryClient = new QueryClient()
     return mount(CalendarView, {
       global: {
-        plugins: [pinia, router],
+        plugins: [pinia, router, [VueQueryPlugin, { queryClient } as VueQueryPluginOptions]],
         stubs: ['router-link'],
       },
     })
