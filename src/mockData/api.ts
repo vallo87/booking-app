@@ -25,3 +25,19 @@ export const fetchBookingByID = async (
   const station = await fetchStation(stationId)
   return station?.bookings.find((booking) => booking.id === bookingId)
 }
+
+export const rescheduleBookingAPI = async (
+  stationId: string,
+  bookingId: string,
+  startDate: string,
+): Promise<void> => {
+  await sleep(400)
+  console.log(
+    'Rescheduling booking:',
+    bookingId,
+    'at station:',
+    stationId,
+    'to start date:',
+    startDate,
+  )
+}

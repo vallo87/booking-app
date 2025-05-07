@@ -68,8 +68,20 @@ describe('CalendarView.vue', () => {
     const wrapper = renderComponent()
 
     const spy = vi.spyOn(wrapper.vm as any, 'selectBooking')
-    const bookingEl = wrapper.find('.link-to-booking')
+    const bookingEl = wrapper.find('[draggable="true"]')
     await bookingEl.trigger('click')
     expect(spy).toHaveBeenCalled()
+  })
+
+  it('updates dropHoverDate on drag enter and clears on leave', async () => {
+    const wrapper = renderComponent()
+
+    const bookingEl = wrapper.find('[draggable="true"]')
+    await bookingEl.trigger('dragenter')
+
+    expect((wrapper.vm as any).dropHoverDate).not.toBeNull()
+    await bookingEl.trigger('dragleave')
+
+    expect((wrapper.vm as any).dropHoverDate).toBeNull()
   })
 })
