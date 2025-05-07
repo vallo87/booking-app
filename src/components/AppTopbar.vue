@@ -9,9 +9,10 @@
 <script setup lang="ts">
 import { ChevronLeft } from 'lucide-vue-next'
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 const pageTitle = computed(() => {
   switch (route.name) {
@@ -27,6 +28,10 @@ const pageTitle = computed(() => {
 })
 
 function goBack() {
-  window.history.back()
+  if (route.name === 'Booking') {
+    router.push({ name: 'Calendar' })
+  } else {
+    router.push({ name: 'Home' })
+  }
 }
 </script>
