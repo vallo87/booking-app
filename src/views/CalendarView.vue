@@ -1,5 +1,7 @@
 <template>
   <div class="p-4 max-w-7xl mx-auto text-slate-800">
+    <AppAutocomplete />
+
     <!-- Pagination -->
     <div class="flex flex-row justify-between items-center mt-6 mb-6 gap-3">
       <button
@@ -55,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+import AppAutocomplete from '@/components/AppAutocomplete.vue'
 import { useStationStore } from '@/stores/station'
 import type { Booking } from '@/types'
 import { addDays, format, startOfWeek } from 'date-fns'
