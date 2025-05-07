@@ -728,7 +728,6 @@ const mockStations = [
       },
     ],
   },
-  { name: 'station-name{{i}}', id: '7', bookings: [] },
 ]
 
 export { mockStations }
